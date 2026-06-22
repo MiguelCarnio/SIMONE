@@ -23,7 +23,14 @@ def menu_configuracao():
     modo = input("Escolha (1 ou 2): ").strip()
 
     if modo == '1':
-        print("Opções: A, B, C, D ou E")
+        print("\n==================================")
+        print("   TIPOS DE FUNÇÃO DISPONÍVEIS:   ")
+        print("==================================")
+        print("A:sla, muito doido")
+        print("B:trigonometria e geometria kk")
+        print("C: sem ideia")
+        print("D:here go again")
+        print("E: n sei")
         escolha_pre = input("Escolha: ").strip().upper()
         pre = {
             'A': [(0.0, 1.0, 'seno'), (1.0, 2.0, 'serrote'), (2.0, 3.0, 'absoluta'), (3.0, 4.0, 'exponencial')],
@@ -33,11 +40,23 @@ def menu_configuracao():
             'E': [(0.0, 0.5, 'seno'), (0.5, 1.0, 'tangente'), (1.0, 1.8, 'cubica'), (1.8, 2.4, 'cosseno'), (2.4, 3.0, 'serrote')]
         }
         juncao = pre.get(escolha_pre, pre['A'])
-    else:
+    else :
         opcoes = ['linear', 'quadratica', 'cubica', 'constante', 'seno', 'cosseno',
                   'tangente', 'sigmoid', 'exponencial', 'raiz', 'absoluta', 'serrote']
 
         while True:
+
+            print("\n==================================")
+            print("   TIPOS DE FUNÇÃO DISPONÍVEIS:   ")
+            print("==================================")
+            print("  1. Linear      2. Quadratica    ")
+            print("  3. Cubica      4. Constante     ")
+            print("  5. Seno        6. Cosseno       ")
+            print("  7. Tangente    8. Sigmoid       ")
+            print("  9. Exponencial 10. Raiz         ")
+            print(" 11. Absoluta    12. Serrote      ")
+            print("==================================")
+            
             tipo = input("Nome da função (ou 'sair'): ").strip().lower()
 
             if tipo == 'sair':
@@ -50,7 +69,7 @@ def menu_configuracao():
 
     amostras = int(input("Qtd amostras (500): ") or 500)
     ruido = float(input("Ruído (0.05): ") or 0.05)
-    tamanho_rede = input("Rede (1, 2 ou 3): ").strip() or '2'
+    tamanho_rede = input("Rede 1, 2 ou 3 (2): ").strip() or '2'
     epochs = int(input("Épocas (5000): ") or 5000)
     lr = float(input("Learning Rate (0.005): ") or 0.005)
 
@@ -115,9 +134,9 @@ def gerar_dados_dinamicos(configuracao, x, nivel_ruido):
 
     return y + np.random.randn(*x.shape) * nivel_ruido
 
-# ==========================================
+
 # 4. CRIAÇÃO DA REDE
-# ==========================================
+
 def criar_modelo(tamanho, lr):
 
     if tamanho == '1':
