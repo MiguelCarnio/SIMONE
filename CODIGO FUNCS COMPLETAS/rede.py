@@ -10,12 +10,10 @@ def configurar_plot():
     plt.style.use('dark_background')
     plt.rcParams['figure.figsize'] = (12, 8)
 
-# ==========================================
-# 2. MEGA MENU INTERATIVO
-# ==========================================
+
 def menu_configuracao():
     print("="*70)
-    print("LABORATÓRIO DE REDES NEURAIS - MEGA MENU")
+    print("REDE NEURAL BASIQUINHA KK")
     print("="*70)
 
     juncao = []
@@ -40,12 +38,11 @@ def menu_configuracao():
             'E': [(0.0, 0.5, 'seno'), (0.5, 1.0, 'tangente'), (1.0, 1.8, 'cubica'), (1.8, 2.4, 'cosseno'), (2.4, 3.0, 'serrote')]
         }
         juncao = pre.get(escolha_pre, pre['A'])
-    else :
+    else:
         opcoes = ['linear', 'quadratica', 'cubica', 'constante', 'seno', 'cosseno',
                   'tangente', 'sigmoid', 'exponencial', 'raiz', 'absoluta', 'serrote']
 
         while True:
-
             print("\n==================================")
             print("   TIPOS DE FUNÇÃO DISPONÍVEIS:   ")
             print("==================================")
@@ -60,24 +57,42 @@ def menu_configuracao():
             tipo = input("Nome da função (ou 'sair'): ").strip().lower()
 
             if tipo == 'sair':
+                if len(juncao) == 0:
+                    print("\n[!] Calma lá! Você precisa adicionar pelo menos UMA função antes de sair.")
+                    continue
                 break
 
             if tipo in opcoes:
-                inicio = float(input("Início: "))
-                fim = float(input("Fim: "))
-                juncao.append((inicio, fim, tipo))
+                try:
+                    inicio = float(input("Início: "))
+                    fim = float(input("Fim: "))
+                    juncao.append((inicio, fim, tipo))
+                    print(f"=> Função '{tipo}' adicionada com sucesso! (De {inicio} até {fim})")
+                except ValueError:
+                    print("\n[!] Por favor, digite apenas números válidos para Início e Fim!")
+            else:
+                print("\n[!] Ops! Nome de função não reconhecido. Verifique a ortografia e tente novamente.")
 
-    amostras = int(input("Qtd amostras (500): ") or 500)
-    ruido = float(input("Ruído (0.05): ") or 0.05)
-    tamanho_rede = input("Rede 1, 2 ou 3 (2): ").strip() or '2'
-    epochs = int(input("Épocas (5000): ") or 5000)
-    lr = float(input("Learning Rate (0.005): ") or 0.005)
+    # Convertendo os inputs garantindo que se ficarem em branco ele assuma o padrão
+    amostras_input = input("\nQtd amostras (500): ").strip()
+    amostras = int(amostras_input) if amostras_input else 500
+    
+    ruido_input = input("Ruído (0.05): ").strip()
+    ruido = float(ruido_input) if ruido_input else 0.05
+    
+    tamanho_rede = input("Rede 1, 2 ou 3 (2): ").strip()
+    tamanho_rede = tamanho_rede if tamanho_rede else '2'
+    
+    epochs_input = input("Épocas (5000): ").strip()
+    epochs = int(epochs_input) if epochs_input else 5000
+    
+    lr_input = input("Learning Rate (0.005): ").strip()
+    lr = float(lr_input) if lr_input else 0.005
 
     return juncao, amostras, ruido, tamanho_rede, epochs, lr
 
-# ==========================================
-# 3. GERAÇÃO DOS DADOS
-# ==========================================
+
+# GERAÇÃO DOS DADOS
 def gerar_dados_dinamicos(configuracao, x, nivel_ruido):
     y = np.zeros_like(x)
 
@@ -92,7 +107,7 @@ def gerar_dados_dinamicos(configuracao, x, nivel_ruido):
         largura = fim - inicio
 
         if tipo == 'linear':
-            y[mascara] = -2.0 * (x_trecho - inicio) + 1.0
+            y[mascara] = 2.0 * (x_trecho - inicio) 
 
         elif tipo == 'quadratica':
             y[mascara] = 4.0 * ((x_trecho - centro) / largura) ** 2 - 0.5
@@ -134,14 +149,17 @@ def gerar_dados_dinamicos(configuracao, x, nivel_ruido):
 
     return y + np.random.randn(*x.shape) * nivel_ruido
 
-
+# ==========================================
 # 4. CRIAÇÃO DA REDE
-
+# ==========================================
 def criar_modelo(tamanho, lr):
-
     if tamanho == '1':
         m = nn.Sequential(
             nn.Linear(1, 64),
+            nn.ReLU(),
+            nn.Linear(64, 64),
+            nn.ReLU(),
+            nn.Linear(64, 64),
             nn.ReLU(),
             nn.Linear(64, 64),
             nn.ReLU(),
@@ -164,6 +182,8 @@ def criar_modelo(tamanho, lr):
     else:
         m = nn.Sequential(
             nn.Linear(1, 128),
+            nn.ReLU(),
+            nn.Linear(128, 128),
             nn.ReLU(),
             nn.Linear(128, 128),
             nn.ReLU(),
