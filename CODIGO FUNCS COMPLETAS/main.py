@@ -7,7 +7,6 @@ from rede import configurar_plot, menu_configuracao, gerar_dados_dinamicos, cria
 import time
 def main():
     configurar_plot()
-    
     #SOCORRO POR FAVOR, NAO SEI OQ ESTOU FAZENDO DIREITO
     arquivos = glob.glob("*.pth")
     print("\n" + "="*35)
